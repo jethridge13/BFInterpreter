@@ -11,20 +11,22 @@ def openFile():
     stdin = input("File name: ")
     try:
         f = open(stdin)
+
+
+        # Read from the file
+        lines = []
+        for line in f:
+            lines.append(line)
+
+        # Close the file
+        f.close()
     except:
         print("Error: File not found or corrupted.")
-
-    # Read from the file
-    lines = []
-    for line in f:
-        lines.append(line)
-
-    # Close the file
-    f.close()
+        return -1
 
     return lines
 
-def handleChar(c):
+def handleChar(c, line, char):
     global ptr
     global cells
     global loopStack
@@ -57,11 +59,30 @@ def handleChar(c):
     elif(c) == ",":
         cells[ptr] = sys.stdin.read(1)
     # [ Start of loop
-    #elif(c) == "[":
-
+    elif(c) == "[":
+        loopStack.append((line, char))
     # ] End of loop
-    #elif(c) == "]":
+    elif(c) == "]":
+        if cells[ptr] == 0:
+            loopStack.pop()
+        else:
+            return loopStack[-1]
+    return (line, char)
 
+def parse(array):
+    line = 0
+    maxLine = len(array)
+    char = 0
+    while line < maxLine:
+        activeLine = array[line]
+        c = activeLine[char]
+        tup = handleChar(c, line, char)
+        line = tup[0]
+        char = tup[1]
+        char += 1
+        if char >= len(array[line]):
+            char = 0
+            line += 1
 
 
 # Load the optional number of cells
@@ -77,10 +98,8 @@ for i in range(1, numberOfCells):
 
 # Open the file
 f = openFile()
+if f == -1:
+    sys.exit(-1)
 
 # Handle the code
-for i in f:
-    for j in i:
-        handleChar(j)
-
-print(cells)
+parse(f)
