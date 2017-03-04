@@ -1,11 +1,15 @@
 import sys, getopt
 
-DEFAULT_CELLS = 10
+DEFAULT_CELLS = 100
 numberOfCells = DEFAULT_CELLS
 cells = [0]
 ptr = 0
 loopStack = []
 
+# @param file The file name that contains the BF program
+# @return array
+# This method accepts a file and then attempts to open it. If the file is not found, it throws an
+# error. It returns a list of all the data in the file. A line in the file is a cell in the list.
 def openFile(file):
     try:
         f = open(file)
@@ -25,6 +29,11 @@ def openFile(file):
 
     return lines
 
+# @param c The character to handle logic for
+# @param line The line from which the character came
+# @param char The char position in the line
+# @return tuple Returns a tuple with the (line, char) of the current position in the logic. This is used in loops.
+# This function handles the logic of the languuage. It manipulates the pointer, cells, input, and output.
 def handleChar(c, line, char):
     global ptr
     global cells
@@ -68,6 +77,8 @@ def handleChar(c, line, char):
             return loopStack[-1]
     return (line, char)
 
+# @param array The array with the information as obtained from calling openFile()
+# This method moves through the array with the language logic.
 def parse(array):
     line = 0
     maxLine = len(array)
@@ -83,6 +94,7 @@ def parse(array):
             char = 0
             line += 1
 
+# This method prints a simple help menu for when the program is not used correctly.
 def printHelp():
     print("BFC.py -f <input file> -c <number of cells>")
 
