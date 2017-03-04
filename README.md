@@ -9,17 +9,26 @@ cells is specified as an optional argument when loading up the script. A default
  or the argument isn't a usable number. In BFC.py, the number of cells is specified with the -c argument.
 
 The language uses only 8 characters. They are specified as follows:
+
     >   Move the pointer one cell to the right. Throws an error if moving the cursor outside the array of cells.
+
     <   Move the pointer one cell to the left. Throws an error if moving the cursor outside the array of cells.
+
     +   Adds one to the value in the cell specified by the pointer, up to a maximum of 255. Adding 1 to 255 flows over
         back to 0.
+
     -   Subtracts one to the value in the cell specified by the pointer, up to a minimum of 0. Subtracting 1 to 0 flows
         over to 255.
+
     .   Outputs to the console the character associated with the value of the cell associated with the pointer.
+
     ,   Accepts one byte of input from the console.
+
     [   Begins a loop.
+
     ]   Ends a loop. If the value in the cell associated with the pointer is 0, then the loop exits. Otherwise, the
         program jumps back to the start of the loop and begins executing that code.
+
     All other characters are considered part of comments and subsequently ignored.
 
 
