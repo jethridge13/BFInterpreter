@@ -1,4 +1,4 @@
-import sys
+import sys, getopt
 
 DEFAULT_CELLS = 10
 numberOfCells = DEFAULT_CELLS
@@ -6,11 +6,9 @@ cells = [0]
 ptr = 0
 loopStack = []
 
-def openFile():
-    # Open the file
-    stdin = input("File name: ")
+def openFile(file):
     try:
-        f = open(stdin)
+        f = open(file)
 
 
         # Read from the file
@@ -22,6 +20,7 @@ def openFile():
         f.close()
     except:
         print("Error: File not found or corrupted.")
+        printHelp()
         return -1
 
     return lines
@@ -84,24 +83,34 @@ def parse(array):
             char = 0
             line += 1
 
+def printHelp():
+    print("BFC.py -f <input file> -c <number of cells>")
+
 def main(argv):
     global numberOfCells
     global cells
-    # Load the optional number of cells
-    argv = sys.argv
-    if len(argv) > 1:
-        try:
-            numberOfCells = int(argv[1])
-        except:
-            print("Invalid number of cells. Using default.")
-            numberOfCells = DEFAULT_CELLS
-    for i in range(1, numberOfCells):
-        cells.append(0)
+    try:
+        opts, args = getopt.getopt(argv[1:], 'f:c:')
+    except getopt.GetoptError:
+        printHelp()
+    file = ""
+    for opt, arg in opts:
+        if opt == "-c":
+            try:
+                numberOfCells = int(arg)
+            except:
+                numberOfCells = DEFAULT_CELLS
+        elif opt == "-f":
+            file = arg
 
     # Open the file
-    f = openFile()
+    f = openFile(file)
     if f == -1:
         sys.exit(-1)
+
+    # Prepare the cells
+    for i in range(1, numberOfCells):
+        cells.append(0)
 
     # Handle the code
     parse(f)
